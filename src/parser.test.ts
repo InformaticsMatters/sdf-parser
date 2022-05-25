@@ -37,7 +37,7 @@ describe('testing wikipedia cafeine sdf', () => {
         recordsWiki.forEach(record =>{
             Object.keys(record).forEach(k => keys.add(k));
         })
-        expect(keys).toEqual(new Set(["molfile", "Compound Name", "Formula", "Molweight"]));
+        expect(keys).toEqual(new Set(["molText", "Compound Name", "Formula", "Molweight"]));
     });
 
     test("mol ends wiki", () => {
