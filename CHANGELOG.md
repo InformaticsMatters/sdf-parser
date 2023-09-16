@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/InformaticsMatters/sdf-parser/compare/v1.0.1...v1.0.2) (2023-09-16)
+
+
+### Bug Fixes
+
+* add npmignore ([b9188ba](https://github.com/InformaticsMatters/sdf-parser/commit/b9188ba217a9685d947c10bcde3742f09b100f3a))
+
 ## [1.0.1](https://github.com/InformaticsMatters/sdf-parser/compare/v1.0.0...v1.0.1) (2023-09-16)
 
 
