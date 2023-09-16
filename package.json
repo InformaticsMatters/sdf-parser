@@ -1,5 +1,6 @@
 {
   "name": "@squonk/sdf-parser",
+  "private": false,
   "version": "1.0.0",
   "contributors": [
     {
