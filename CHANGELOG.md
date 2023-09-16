@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/InformaticsMatters/sdf-parser/compare/v1.0.0...v1.0.1) (2023-09-16)
+
+
+### Bug Fixes
+
+* make package public so it can be published ([12f5321](https://github.com/InformaticsMatters/sdf-parser/commit/12f53219a1d95190511db482708749052b52503e))
+
 ## 1.0.0 (2023-09-16)
 
 
