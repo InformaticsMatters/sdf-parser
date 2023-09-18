@@ -1,5 +1,5 @@
-import { type SDFRecord, parseSdPart } from "./parser.js";
-import { splitLines } from "./utils.js";
+import { type SDFRecord, parseSdPart } from "./parser";
+import { splitLines } from "./utils";
 
 const RECORD_SEPARATOR = "$$$$";
 

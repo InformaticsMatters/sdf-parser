@@ -1,8 +1,8 @@
-﻿import { splitLines } from "./utils.js";
+﻿import { splitLines } from "./utils";
 
 export type SDFRecord = {
   molFile: string | undefined;
-  properties: Record<string, string | number | undefined>;
+  properties: Record<string, string | undefined>;
 };
 
 export const parseSdPart = (recordLines: string[]) => {

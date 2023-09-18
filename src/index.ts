@@ -1,2 +1,2 @@
-﻿export * from "./parser.js";
-export * from "./stream.js";
+﻿export * from "./parser";
+export * from "./stream";
