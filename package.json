@@ -1,7 +1,7 @@
 {
   "name": "@squonk/sdf-parser",
   "private": false,
-  "version": "1.0.3",
+  "version": "1.0.4",
   "contributors": [
     {
       "name": "Informatics Matters Ltd"

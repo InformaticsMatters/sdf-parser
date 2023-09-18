@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.4](https://github.com/InformaticsMatters/sdf-parser/compare/v1.0.3...v1.0.4) (2023-09-18)
+
+
+### Bug Fixes
+
+* fix to trigger re-release ([c4f089a](https://github.com/InformaticsMatters/sdf-parser/commit/c4f089af09fc880badb35e98e3c695e2d852b327))
+
 ## [1.0.3](https://github.com/InformaticsMatters/sdf-parser/compare/v1.0.2...v1.0.3) (2023-09-18)
 
 
