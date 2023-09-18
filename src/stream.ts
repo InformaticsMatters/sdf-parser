@@ -28,7 +28,6 @@ export const createSDFTransformer = () => {
 
   // TransformStream to be used with stream.pipeThrough()
   return new TransformStream<string, SDFRecord>({
-    // start() {},
     async transform(chunk, controller) {
       content += chunk.replaceAll("\r\n", "\n");
 
@@ -43,6 +42,5 @@ export const createSDFTransformer = () => {
         controller.enqueue(record);
       }
     },
-    // flush() {},
   });
 };
