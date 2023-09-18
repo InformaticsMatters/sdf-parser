@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3](https://github.com/InformaticsMatters/sdf-parser/compare/v1.0.2...v1.0.3) (2023-09-18)
+
+
+### Bug Fixes
+
+* **typescript:** fix imports to match module resolution ([6aff39f](https://github.com/InformaticsMatters/sdf-parser/commit/6aff39f14ff3c204e06bb34e06d127526183063c))
+
 ## [1.0.2](https://github.com/InformaticsMatters/sdf-parser/compare/v1.0.1...v1.0.2) (2023-09-16)
 
 
