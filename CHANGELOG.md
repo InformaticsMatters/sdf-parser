@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/InformaticsMatters/sdf-parser/compare/v1.0.4...v1.1.0) (2023-10-01)
+
+
+### Features
+
+* **nodejs:** add stream transformer compatible with node:stream ([cd6c135](https://github.com/InformaticsMatters/sdf-parser/commit/cd6c1351418d810c27121ce774c612cf00c41a55))
+
 ## [1.0.4](https://github.com/InformaticsMatters/sdf-parser/compare/v1.0.3...v1.0.4) (2023-09-18)
 
 
