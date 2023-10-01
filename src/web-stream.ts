@@ -13,13 +13,9 @@ const RECORD_SEPARATOR = "$$$$";
  *   .pipeThrough(new DecompressionStream("gzip")) // if file is gzipped
  *   .pipeThrough(new TextDecoderStream())
  *   .pipeThrough(createSDFTransformer())
- *   .pipeTo(
- *     new WritableStream({
- *       write(chunk) {
- *         console.log(chunk);
- *       },
- *     })
- *   );
+ *   .on("data", (record) => {
+ *     // do something with the parsed record, it's a string so needs to be parsed again
+ *   });
   ```
  * @returns instance of `TransformStream`
  */

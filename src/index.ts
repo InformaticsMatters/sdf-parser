@@ -1,2 +1,3 @@
 ﻿export * from "./parser";
-export * from "./stream";
+export * from "./web-stream";
+export * from "./node-stream";
