@@ -7,7 +7,7 @@ This parser parses a sdf file, supporting web streams, and returns a collection 
 ```typescript
 export type SDFRecord = {
   molText: string | undefined;
-  properties: Record<string, string | number | undefined>;
+  properties: Record<string, string | undefined>;
 };
 ```
 
@@ -48,7 +48,7 @@ records:
 ];
 ```
 
-## Example 2: Streaming
+## Example 2: Web Streams
 
 Using web streams, that are now available in most browsers, we create a readable stream with, for example, a `fetch` request. We can pipe this through the required decoding transformers before parsing it with the provided SDF StreamTransformer.
 
@@ -64,3 +64,18 @@ if (stream) {
 ```
 
 You can then `.pipeTo` a `WriteableStream` and do what you wish with each chunk which will be a record object.
+
+## Example 3: NodeJS Streams
+
+If you can't rely on the availability of web streams APIs, and can instead parse on a server then you can use this NodeJS implementation.
+
+```typescript
+const response = fetch("/some/sdf-file.sdf.gz");
+const stream = response.body;
+if (stream) {
+  stream
+    .pipe(createGunzip()) // if file is gzipped
+    .pipe(decoderTransform) // wrap a TextDecoder
+    .pipe(new NodeSDFTransformer()) // parse the SDF record stream
+}
+```
