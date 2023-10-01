@@ -55,20 +55,22 @@ describe("Web stream", async () => {
 });
 
 const consumeStream = (stream: Transform) => {
-  return new Promise<SDFRecord[]>((resolve, reject) => {
-    let recordsString = ""
+  return new Promise<SDFRecord[]>((resolve) => {
+    let recordsString = "";
 
-    stream.pipe(new Writable({
-      write(chunk, _encoding, callback) {
-        recordsString += chunk
-        callback()
-      },
-      final(callback) {
-        const records = JSON.parse(recordsString)
-        resolve(records)
-        callback()
-      }
-    }))
+    stream.pipe(
+      new Writable({
+        write(chunk, _encoding, callback) {
+          recordsString += chunk;
+          callback();
+        },
+        final(callback) {
+          const records = JSON.parse(recordsString);
+          resolve(records);
+          callback();
+        },
+      }),
+    );
   });
 };
 
@@ -97,9 +99,10 @@ describe("NodeJS stream", async () => {
 
   if (!(stream1 && stream2)) throw new Error("No stream");
 
-  const streamedRecords = await consumeStream(stream1.pipe(decoderTransform()).pipe(new NodeSDFTransformer()))
+  const streamedRecords = await consumeStream(
+    stream1.pipe(decoderTransform()).pipe(new NodeSDFTransformer()),
+  );
   const records = await normalParser(stream2.pipeThrough(new TextDecoderStream()));
-
 
   it("Number of records in stream and normal parser match", async () => {
     expect(streamedRecords.length).toBe(records.length);

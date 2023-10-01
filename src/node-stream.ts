@@ -1,11 +1,11 @@
-import { Transform, type TransformCallback, type TransformOptions } from "node:stream";
+import { type TransformCallback, type TransformOptions, Transform } from "node:stream";
 
 import { parseSdPart } from "./parser";
 import { splitLines } from "./utils";
 
 const RECORD_SEPARATOR = "$$$$";
 
-const countRecords = (buffer: string) => buffer.match(/\${4}.*/g)?.length ?? 0
+const countRecords = (buffer: string) => buffer.match(/\${4}.*/g)?.length ?? 0;
 
 /**
  * A extension to `Transform` that takes a stream of SDF text and outputs a stream of parsed records
@@ -38,14 +38,13 @@ const countRecords = (buffer: string) => buffer.match(/\${4}.*/g)?.length ?? 0
  *
  *
  * ```
- * @returns instance of `NodeSDFTransformer`
  */
 export class NodeSDFTransformer extends Transform {
   constructor(options?: TransformOptions, private buffer = "") {
     super({ ...options, readableObjectMode: true, writableObjectMode: true });
     this.buffer = buffer;
 
-    this.push("[")
+    this.push("[");
   }
 
   private parse() {
@@ -56,9 +55,8 @@ export class NodeSDFTransformer extends Transform {
     const record = parseSdPart(recordLines);
     this.buffer = this.buffer.slice(recordEndIndex + RECORD_SEPARATOR.length + 1);
 
-    return record
+    return record;
   }
-
 
   _transform(chunk: any, _encoding: BufferEncoding, callback: TransformCallback) {
     const data = chunk.toString();
@@ -79,7 +77,7 @@ export class NodeSDFTransformer extends Transform {
     const record = this.parse();
     const json = JSON.stringify(record);
     this.push(json);
-    this.push("]")
+    this.push("]");
 
     callback();
   }
