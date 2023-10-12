@@ -30,11 +30,13 @@
     "build": "tsup",
     "start": "tsup --watch",
     "tsc": "tsc --pretty --noEmit",
-    "format:all": "eslint --fix --cache .",
+    "lint": "if [ $(pnpm c --user get MONOREPO) = true ]; then eslint --cache --max-warnings=0 --resolve-plugins-relative-to=\"../../libs/eslint-config\"; else eslint --cache --max-warnings=0 --resolve-plugins-relative-to=\"./node_modules/@squonk/eslint-config\"; fi",
+    "format": "if [ $(pnpm c --user get MONOREPO) = true ]; then eslint --fix --cache --max-warnings=0 --resolve-plugins-relative-to=\"../../libs/eslint-config\"; else eslint --fix --cache --max-warnings=0 --resolve-plugins-relative-to=\"./node_modules/@squonk/eslint-config\"; fi",
+    "format:all": "if [ $(pnpm c --user get MONOREPO) = true ]; then eslint --fix . --cache --max-warnings=0 --resolve-plugins-relative-to=\"../../libs/eslint-config\"; else eslint --fix . --cache --max-warnings=0 --resolve-plugins-relative-to=\"./node_modules/@squonk/eslint-config\"; fi",
     "test": "vitest"
   },
   "devDependencies": {
-    "@squonk/eslint-config": "0.5.0",
+    "@squonk/eslint-config": "1.0.0",
     "@types/node": "18.11.9",
     "eslint": "8.49.0",
     "tsup": "7.2.0",
