@@ -1,4 +1,4 @@
-import { type TransformCallback, type TransformOptions, Transform } from "node:stream";
+import { Transform, type TransformCallback, type TransformOptions } from "node:stream";
 
 import { parseSdPart } from "./parser";
 import { splitLines } from "./utils";
@@ -40,7 +40,10 @@ const countRecords = (buffer: string) => buffer.match(/\${4}.*/g)?.length ?? 0;
  * ```
  */
 export class NodeSDFTransformer extends Transform {
-  constructor(options?: TransformOptions, private buffer = "") {
+  constructor(
+    options?: TransformOptions,
+    private buffer = "",
+  ) {
     super({ ...options, readableObjectMode: true, writableObjectMode: true });
     this.buffer = buffer;
 

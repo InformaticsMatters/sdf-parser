@@ -1,4 +1,4 @@
-import { type SDFRecord, parseSdPart } from "./parser";
+import { parseSdPart, type SDFRecord } from "./parser";
 import { splitLines } from "./utils";
 
 const RECORD_SEPARATOR = "$$$$";
