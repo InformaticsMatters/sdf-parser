@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/InformaticsMatters/sdf-parser/compare/v1.1.0...v1.2.0) (2023-11-25)
+
+
+### Features
+
+* **filter:** add basic filtering function to streams ([0655459](https://github.com/InformaticsMatters/sdf-parser/commit/06554590baa93bdaa52bfc4ba25f0a74d8267a39))
+
 ## [1.1.0](https://github.com/InformaticsMatters/sdf-parser/compare/v1.0.4...v1.1.0) (2023-10-01)
 
 
