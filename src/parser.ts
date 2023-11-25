@@ -2,7 +2,10 @@
 
 export type SDFRecord = {
   molFile: string | undefined;
-  properties: Record<string, string | undefined>;
+  // mapping from property name to property value
+  // doesn't strictly need undefined here since it's only show the property may be missing,
+  // tsconfig should
+  properties: Record<string, string>;
 };
 
 export const parseSdPart = (recordLines: string[]) => {
@@ -19,12 +22,12 @@ export const parseSdPart = (recordLines: string[]) => {
     if (record.molFile) {
       const matchHeader = line.match(patternHeader);
       if (matchHeader?.length == 2) {
-        key = matchHeader[1];
+        key = matchHeader[1] as string;
       } else {
         const hasKeyAndValue = key === "" || line === "";
         if (!hasKeyAndValue) {
           const oldValue = record.properties[key];
-          record.properties[key] = oldValue ? `${oldValue};${line}` : line;
+          record.properties[key] = oldValue ? `${oldValue}\r\n${line}` : line;
         }
       }
     } else {

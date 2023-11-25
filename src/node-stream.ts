@@ -1,5 +1,7 @@
 import { Transform, type TransformCallback, type TransformOptions } from "node:stream";
 
+import type { FilterFn } from "./filter";
+import type { SDFRecord } from "./parser";
 import { parseSdPart } from "./parser";
 import { splitLines } from "./utils";
 
@@ -41,16 +43,18 @@ const countRecords = (buffer: string) => buffer.match(/\${4}.*/g)?.length ?? 0;
  */
 export class NodeSDFTransformer extends Transform {
   constructor(
+    private filter: FilterFn = () => true,
     options?: TransformOptions,
+    // these shouldn't be in the constructor definition but how set these to this without ts complaining?
     private buffer = "",
+    private record: SDFRecord | undefined = undefined,
   ) {
     super({ ...options, readableObjectMode: true, writableObjectMode: true });
-    this.buffer = buffer;
 
     this.push("[");
   }
 
-  private parse() {
+  private parse(): SDFRecord {
     const recordEndIndex = this.buffer.indexOf(RECORD_SEPARATOR);
     const recordText = this.buffer.slice(0, recordEndIndex);
 
@@ -66,20 +70,30 @@ export class NodeSDFTransformer extends Transform {
 
     this.buffer += data.replace(/\r\n/g, "\n");
 
-    while (countRecords(this.buffer) > 1) {
+    while (countRecords(this.buffer) > 0) {
       const record = this.parse();
-      const json = JSON.stringify(record);
-      this.push(json + ",");
+      if (this.filter(record)) {
+        if (this.record) {
+          const json = JSON.stringify(this.record);
+          this.push(json + ",");
+          this.record = record;
+        } else {
+          this.record = record;
+        }
+      }
     }
 
     callback();
   }
 
   _flush(callback: TransformCallback) {
-    // Handle the remaining record in the buffer
-    const record = this.parse();
-    const json = JSON.stringify(record);
-    this.push(json);
+    const record = this.record;
+
+    if (record) {
+      const json = JSON.stringify(record);
+      this.push(json);
+    }
+
     this.push("]");
 
     callback();

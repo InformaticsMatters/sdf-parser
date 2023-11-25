@@ -2,8 +2,9 @@ import { Transform, Writable } from "node:stream";
 import njfetch from "node-fetch";
 import { describe, expect, it } from "vitest";
 
-import type { SDFRecord } from "..";
+import { filterRecord, type FilterRule } from "../src/filter";
 import { NodeSDFTransformer } from "../src/node-stream";
+import type { SDFRecord } from "../src/parser";
 import { createSDFTransformer as createWebSDFTransformer, parser } from "..";
 
 const webStreamParser = async (stream: ReadableStream<string>) => {
@@ -110,5 +111,156 @@ describe("NodeJS stream", async () => {
 
   it("Records from stream and normal parser match", async () => {
     expect(streamedRecords).toEqual(records);
+  });
+});
+
+describe("Filter with treatAs number", () => {
+  const record: SDFRecord = {
+    molFile: "",
+    properties: {
+      property1: "",
+      property2: "abc",
+      property3: "123",
+      property4: "-123",
+    },
+  };
+
+  it("Filter drops empty string if treated as a number", () => {
+    const filterRules: FilterRule[] = [
+      {
+        property: "property1",
+        treatAs: "number",
+        min: 0,
+        max: Infinity,
+      },
+    ];
+    const filter = (record: SDFRecord) => filterRecord(record, filterRules);
+
+    expect(filter(record)).toBe(false);
+  });
+
+  it("Filter drops non-numbers if treated as a number", () => {
+    const filterRules: FilterRule[] = [
+      {
+        property: "property2",
+        treatAs: "number",
+        min: 0,
+        max: Infinity,
+      },
+    ];
+    const filter = (record: SDFRecord) => filterRecord(record, filterRules);
+
+    expect(filter(record)).toBe(false);
+  });
+
+  it("Filter keeps numbers when using infinite bounds", () => {
+    const filterRules: FilterRule[] = [
+      {
+        property: "property3",
+        treatAs: "number",
+        min: -Infinity,
+        max: Infinity,
+      },
+    ];
+    const filter = (record: SDFRecord) => filterRecord(record, filterRules);
+
+    expect(filter(record)).toBe(true);
+  });
+
+  it("Filter keeps numbers when using semi-infinite bounds", () => {
+    const filterRules: FilterRule[] = [
+      {
+        property: "property3",
+        treatAs: "number",
+        min: 0,
+        max: Infinity,
+      },
+    ];
+    const filter = (record: SDFRecord) => filterRecord(record, filterRules);
+
+    expect(filter(record)).toBe(true);
+  });
+
+  it("Filter drops negative numbers when out of bounds", () => {
+    const filterRules: FilterRule[] = [
+      {
+        property: "property4",
+        treatAs: "number",
+        min: 0,
+        max: Infinity,
+      },
+    ];
+    const filter = (record: SDFRecord) => filterRecord(record, filterRules);
+
+    expect(filter(record)).toBe(false);
+  });
+});
+
+const getAStream = async () => {
+  const response = await njfetch(
+    "https://github.com/InformaticsMatters/sdf-parser/raw/master/tests/data/poses.sdf",
+  );
+  const stream = response.body;
+
+  if (!stream) throw new Error("No stream");
+
+  return stream;
+};
+
+describe("NodeJS stream with filter", async () => {
+  it("Filter drops all records", async () => {
+    const stream = await getAStream();
+    const filterRules: FilterRule[] = [
+      {
+        property: "TransFSScore",
+        treatAs: "number",
+        min: -Infinity,
+        max: 0,
+      },
+    ];
+    const filter = (record: SDFRecord) => filterRecord(record, filterRules);
+
+    const streamedRecords = await consumeStream(
+      stream.pipe(decoderTransform()).pipe(new NodeSDFTransformer(filter)),
+    );
+    expect(streamedRecords).toHaveLength(0);
+  });
+
+  it("Filter keeps all records", async () => {
+    const stream = await getAStream();
+
+    const filterRules: FilterRule[] = [
+      {
+        property: "FeatureStein",
+        treatAs: "number",
+        min: -Infinity,
+        max: Infinity,
+      },
+    ];
+    const filter = (record: SDFRecord) => filterRecord(record, filterRules);
+
+    const streamedRecords = await consumeStream(
+      stream.pipe(decoderTransform()).pipe(new NodeSDFTransformer(filter)),
+    );
+    expect(streamedRecords).toHaveLength(268);
+  });
+
+  it("Filter keeps the right number of records", async () => {
+    const stream = await getAStream();
+
+    const filterRules: FilterRule[] = [
+      {
+        property: "TransFSScore",
+        treatAs: "number",
+        min: 0.2,
+        max: 0.3,
+      },
+    ];
+    const filter = (record: SDFRecord) => filterRecord(record, filterRules);
+
+    const streamedRecords = await consumeStream(
+      stream.pipe(decoderTransform()).pipe(new NodeSDFTransformer(filter)),
+    );
+    expect(streamedRecords).toHaveLength(53);
   });
 });

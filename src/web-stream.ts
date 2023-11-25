@@ -1,3 +1,4 @@
+import type { FilterFn } from "./filter";
 import { parseSdPart, type SDFRecord } from "./parser";
 import { splitLines } from "./utils";
 
@@ -19,7 +20,7 @@ const RECORD_SEPARATOR = "$$$$";
   ```
  * @returns instance of `TransformStream`
  */
-export const createSDFTransformer = () => {
+export const createSDFTransformer = (filter: FilterFn = () => true) => {
   let content = ""; // accumulator for the content of the current record
 
   // TransformStream to be used with stream.pipeThrough()
@@ -35,7 +36,9 @@ export const createSDFTransformer = () => {
         const record = parseSdPart(recordLines);
         content = content.slice(recordEndIndex + RECORD_SEPARATOR.length + 1);
 
-        controller.enqueue(record);
+        if (filter(record)) {
+          controller.enqueue(record);
+        }
       }
     },
   });
