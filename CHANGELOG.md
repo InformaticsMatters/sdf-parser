@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/InformaticsMatters/sdf-parser/compare/v1.2.0...v1.3.0) (2023-12-16)
+
+
+### Features
+
+* **exclude-properties:** support excluding properties from the response ([e687322](https://github.com/InformaticsMatters/sdf-parser/commit/e6873226c3eeff8d0d4a2341b0e41b7642afb59a))
+
 ## [1.2.0](https://github.com/InformaticsMatters/sdf-parser/compare/v1.1.0...v1.2.0) (2023-11-25)
 
 
