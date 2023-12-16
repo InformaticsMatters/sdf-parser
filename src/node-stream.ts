@@ -1,6 +1,6 @@
 import { Transform, type TransformCallback, type TransformOptions } from "node:stream";
 
-import type { FilterFn } from "./filter";
+import { filterExcludedProperties, type FilterFn } from "./filter";
 import type { SDFRecord } from "./parser";
 import { parseSdPart } from "./parser";
 import { splitLines } from "./utils";
@@ -44,6 +44,7 @@ const countRecords = (buffer: string) => buffer.match(/\${4}.*/g)?.length ?? 0;
 export class NodeSDFTransformer extends Transform {
   constructor(
     private filter: FilterFn = () => true,
+    private excludedProperties: string[] = [],
     options?: TransformOptions,
     // these shouldn't be in the constructor definition but how set these to this without ts complaining?
     private buffer = "",
@@ -74,7 +75,10 @@ export class NodeSDFTransformer extends Transform {
       const record = this.parse();
       if (this.filter(record)) {
         if (this.record) {
-          const json = JSON.stringify(this.record);
+          const json = JSON.stringify(
+            filterExcludedProperties(this.record, this.excludedProperties),
+          );
+
           this.push(json + ",");
           this.record = record;
         } else {
@@ -90,7 +94,7 @@ export class NodeSDFTransformer extends Transform {
     const record = this.record;
 
     if (record) {
-      const json = JSON.stringify(record);
+      const json = JSON.stringify(filterExcludedProperties(record, this.excludedProperties));
       this.push(json);
     }
 

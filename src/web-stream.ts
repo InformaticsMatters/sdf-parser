@@ -1,4 +1,4 @@
-import type { FilterFn } from "./filter";
+import { filterExcludedProperties, type FilterFn } from "./filter";
 import { parseSdPart, type SDFRecord } from "./parser";
 import { splitLines } from "./utils";
 
@@ -20,7 +20,10 @@ const RECORD_SEPARATOR = "$$$$";
   ```
  * @returns instance of `TransformStream`
  */
-export const createSDFTransformer = (filter: FilterFn = () => true) => {
+export const createSDFTransformer = (
+  filter: FilterFn = () => true,
+  excludedProperties: string[] = [],
+) => {
   let content = ""; // accumulator for the content of the current record
 
   // TransformStream to be used with stream.pipeThrough()
@@ -37,7 +40,7 @@ export const createSDFTransformer = (filter: FilterFn = () => true) => {
         content = content.slice(recordEndIndex + RECORD_SEPARATOR.length + 1);
 
         if (filter(record)) {
-          controller.enqueue(record);
+          controller.enqueue(filterExcludedProperties(record, excludedProperties));
         }
       }
     },
