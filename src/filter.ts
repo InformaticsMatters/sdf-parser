@@ -1,4 +1,4 @@
-import type { SDFRecord } from "./parser";
+import { type SDFRecord } from "./parser";
 
 export const filterExcludedProperties = (
   record: SDFRecord,
@@ -24,26 +24,34 @@ export type FilterRule = {
   property: string;
   min: number;
   max: number;
-  treatAs: "string" | "number" | "integer" | "object" | "array" | "boolean" | "null";
+  treatAs: "array" | "boolean" | "integer" | "null" | "number" | "object" | "string";
 };
 
 export const filterRecord = (record: SDFRecord, rules: FilterRule[]): boolean => {
   for (const rule of rules) {
     const value = record.properties[rule.property];
     // skip the filter check if the property is missing from the record
-    if (value === undefined) continue;
+    if (value === undefined) {
+      continue;
+    }
 
     // handle each type of filter
     switch (rule.treatAs) {
       case "number":
       case "integer": {
-        if (value === "") return false;
+        if (value === "") {
+          return false;
+        }
         // parseFloat has issues so should probably use a library
         const numberValue = Number.parseFloat(value);
         // if the value is not parsable to a number, drop the record
-        if (Number.isNaN(numberValue)) return false;
+        if (Number.isNaN(numberValue)) {
+          return false;
+        }
         // Keep records within the range inclusive of values equal to the bounds, I.e [min, max]
-        if (numberValue < rule.min || numberValue > rule.max) return false;
+        if (numberValue < rule.min || numberValue > rule.max) {
+          return false;
+        }
         break;
       }
       // TODO: To implement

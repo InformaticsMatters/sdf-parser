@@ -1,13 +1,12 @@
 import { Transform, type TransformCallback, type TransformOptions } from "node:stream";
 
 import { filterExcludedProperties, type FilterFn } from "./filter";
-import type { SDFRecord } from "./parser";
-import { parseSdPart } from "./parser";
+import { parseSdPart, type SDFRecord } from "./parser";
 import { splitLines } from "./utils";
 
 const RECORD_SEPARATOR = "$$$$";
 
-const countRecords = (buffer: string) => buffer.match(/\${4}.*/g)?.length ?? 0;
+const countRecords = (buffer: string) => buffer.match(/\${4}.*/gu)?.length ?? 0;
 
 /**
  * A extension to `Transform` that takes a stream of SDF text and outputs a stream of parsed records
@@ -42,13 +41,13 @@ const countRecords = (buffer: string) => buffer.match(/\${4}.*/g)?.length ?? 0;
  * ```
  */
 export class NodeSDFTransformer extends Transform {
+  private buffer = "";
+  private record: SDFRecord | undefined = undefined;
+
   constructor(
-    private filter: FilterFn = () => true,
-    private excludedProperties: string[] = [],
+    public filterFn: FilterFn = () => true,
+    public excludedProperties: string[] = [],
     options?: TransformOptions,
-    // these shouldn't be in the constructor definition but how set these to this without ts complaining?
-    private buffer = "",
-    private record: SDFRecord | undefined = undefined,
   ) {
     super({ ...options, readableObjectMode: true, writableObjectMode: true });
 
@@ -69,11 +68,11 @@ export class NodeSDFTransformer extends Transform {
   _transform(chunk: any, _encoding: BufferEncoding, callback: TransformCallback) {
     const data = chunk.toString();
 
-    this.buffer += data.replace(/\r\n/g, "\n");
+    this.buffer += data.replace(/\r\n/gu, "\n");
 
     while (countRecords(this.buffer) > 0) {
       const record = this.parse();
-      if (this.filter(record)) {
+      if (this.filterFn(record)) {
         if (this.record) {
           const json = JSON.stringify(
             filterExcludedProperties(this.record, this.excludedProperties),

@@ -28,7 +28,7 @@ export const createSDFTransformer = (
 
   // TransformStream to be used with stream.pipeThrough()
   return new TransformStream<string, SDFRecord>({
-    async transform(chunk, controller) {
+    transform(chunk, controller) {
       content += chunk.replaceAll("\r\n", "\n");
 
       while (content.includes(RECORD_SEPARATOR)) {

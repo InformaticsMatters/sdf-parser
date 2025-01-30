@@ -35,12 +35,12 @@
     "test": "vitest"
   },
   "devDependencies": {
-    "@squonk/eslint-config": "1.0.0",
-    "@types/node": "18.11.9",
-    "eslint": "8.54.0",
-    "tsup": "8.0.1",
-    "typescript": "5.3.2",
-    "vitest": "0.34.6",
+    "@squonk/eslint-config": "2.0.0",
+    "@types/node": "22.9.0",
+    "eslint": "8.57.0",
+    "tsup": "8.0.2",
+    "typescript": "5.4.5",
+    "vitest": "1.5.0",
     "node-fetch": "3.3.2"
   }
 }

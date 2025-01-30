@@ -35,5 +35,8 @@
     // "composite": true,
     "sourceMap": true,
     "declarationMap": true
-  }
+  },
+  "exclude": [
+    "dist"
+  ]
 }

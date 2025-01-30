@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/require-await */
 import { Transform, Writable } from "node:stream";
 import njfetch from "node-fetch";
 import { describe, expect, it } from "vitest";
 
 import { filterRecord, type FilterRule } from "../src/filter";
 import { NodeSDFTransformer } from "../src/node-stream";
-import type { SDFRecord } from "../src/parser";
+import { type SDFRecord } from "../src/parser";
 import { createSDFTransformer as createWebSDFTransformer, parser } from "..";
 
 const webStreamParser = async (stream: ReadableStream<string>) => {
@@ -39,7 +40,9 @@ describe("Web stream", async () => {
   );
   const stream = response.body;
 
-  if (!stream) throw new Error("No stream");
+  if (!stream) {
+    throw new Error("No stream");
+  }
 
   const [stream1, stream2] = stream.pipeThrough(new TextDecoderStream()).tee();
 
@@ -76,7 +79,7 @@ const consumeStream = (stream: Transform) => {
 };
 
 const decoderTransform = () => {
-  const decoder = new TextDecoder("utf-8");
+  const decoder = new TextDecoder();
   return new Transform({
     transform(chunk, _encoding, callback) {
       // Decode the incoming chunk from bytes to text
@@ -98,7 +101,9 @@ describe("NodeJS stream", async () => {
   );
   const stream2 = fetchResponse.body;
 
-  if (!(stream1 && stream2)) throw new Error("No stream");
+  if (!(stream1 && stream2)) {
+    throw new Error("No stream");
+  }
 
   const streamedRecords = await consumeStream(
     stream1.pipe(decoderTransform()).pipe(new NodeSDFTransformer()),
@@ -131,7 +136,7 @@ describe("Filter with treatAs number", () => {
         property: "property1",
         treatAs: "number",
         min: 0,
-        max: Infinity,
+        max: Number.POSITIVE_INFINITY,
       },
     ];
     const filter = (record: SDFRecord) => filterRecord(record, filterRules);
@@ -145,7 +150,7 @@ describe("Filter with treatAs number", () => {
         property: "property2",
         treatAs: "number",
         min: 0,
-        max: Infinity,
+        max: Number.POSITIVE_INFINITY,
       },
     ];
     const filter = (record: SDFRecord) => filterRecord(record, filterRules);
@@ -158,8 +163,8 @@ describe("Filter with treatAs number", () => {
       {
         property: "property3",
         treatAs: "number",
-        min: -Infinity,
-        max: Infinity,
+        min: Number.NEGATIVE_INFINITY,
+        max: Number.POSITIVE_INFINITY,
       },
     ];
     const filter = (record: SDFRecord) => filterRecord(record, filterRules);
@@ -173,7 +178,7 @@ describe("Filter with treatAs number", () => {
         property: "property3",
         treatAs: "number",
         min: 0,
-        max: Infinity,
+        max: Number.POSITIVE_INFINITY,
       },
     ];
     const filter = (record: SDFRecord) => filterRecord(record, filterRules);
@@ -187,7 +192,7 @@ describe("Filter with treatAs number", () => {
         property: "property4",
         treatAs: "number",
         min: 0,
-        max: Infinity,
+        max: Number.POSITIVE_INFINITY,
       },
     ];
     const filter = (record: SDFRecord) => filterRecord(record, filterRules);
@@ -202,7 +207,9 @@ const getAStream = async () => {
   );
   const stream = response.body;
 
-  if (!stream) throw new Error("No stream");
+  if (!stream) {
+    throw new Error("No stream");
+  }
 
   return stream;
 };
@@ -214,7 +221,7 @@ describe("NodeJS stream with filter", async () => {
       {
         property: "TransFSScore",
         treatAs: "number",
-        min: -Infinity,
+        min: Number.NEGATIVE_INFINITY,
         max: 0,
       },
     ];
@@ -233,8 +240,8 @@ describe("NodeJS stream with filter", async () => {
       {
         property: "FeatureStein",
         treatAs: "number",
-        min: -Infinity,
-        max: Infinity,
+        min: Number.NEGATIVE_INFINITY,
+        max: Number.POSITIVE_INFINITY,
       },
     ];
     const filter = (record: SDFRecord) => filterRecord(record, filterRules);
