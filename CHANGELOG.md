@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/InformaticsMatters/sdf-parser/compare/v1.3.0...v1.3.1) (2025-04-22)
+
+
+### Miscellaneous Chores
+
+* release 1.3.1 ([fd470c5](https://github.com/InformaticsMatters/sdf-parser/commit/fd470c57bd321e5d2fa9acb0afeb28fddff293d7))
+
 ## [1.3.0](https://github.com/InformaticsMatters/sdf-parser/compare/v1.2.0...v1.3.0) (2023-12-16)
 
 
