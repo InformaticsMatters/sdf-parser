@@ -15,12 +15,28 @@
   "license": "MIT",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./node": "./src/node-stream.ts",
+    "./web": "./src/web-stream.ts"
   },
   "types": "./src/index.ts",
   "publishConfig": {
     "exports": {
-      ".": "./dist/index.js"
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js",
+        "require": "./dist/index.cjs"
+      },
+      "./node": {
+        "types": "./dist/node-stream.d.ts",
+        "import": "./dist/node-stream.js",
+        "require": "./dist/node-stream.cjs"
+      },
+      "./web": {
+        "types": "./dist/web-stream.d.ts",
+        "import": "./dist/web-stream.js",
+        "require": "./dist/web-stream.cjs"
+      }
     },
     "main": "dist/index.cjs",
     "module": "dist/index.js",

@@ -2,6 +2,9 @@ import { filterExcludedProperties, type FilterFn } from "./filter";
 import { parseSdPart, type SDFRecord } from "./parser";
 import { splitLines } from "./utils";
 
+export * from "./filter";
+export * from "./parser";
+
 const RECORD_SEPARATOR = "$$$$";
 
 /**
