@@ -14,37 +14,35 @@
   "description": "A parser for SDF files with streaming support",
   "license": "MIT",
   "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "exports": {
     ".": "./src/index.ts",
     "./node": "./src/node-stream.ts",
-    "./web": "./src/web-stream.ts"
+    "./web": "./src/web-stream.ts",
+    "./package.json": "./package.json"
   },
-  "types": "./src/index.ts",
+  "types": "./dist/index.d.cts",
   "publishConfig": {
     "exports": {
       ".": {
-        "types": "./dist/index.d.ts",
-        "import": "./dist/index.js",
-        "require": "./dist/index.cjs"
+        "require": "./dist/index.cjs",
+        "import": "./dist/index.js"
       },
       "./node": {
-        "types": "./dist/node-stream.d.ts",
-        "import": "./dist/node-stream.js",
-        "require": "./dist/node-stream.cjs"
+        "require": "./dist/node.cjs",
+        "import": "./dist/node.js"
       },
       "./web": {
-        "types": "./dist/web-stream.d.ts",
-        "import": "./dist/web-stream.js",
-        "require": "./dist/web-stream.cjs"
-      }
-    },
-    "main": "dist/index.cjs",
-    "module": "dist/index.js",
-    "types": "dist/index.d.ts"
+        "require": "./dist/web.cjs",
+        "import": "./dist/web.js"
+      },
+      "./package.json": "./package.json"
+    }
   },
   "scripts": {
-    "build": "tsup",
-    "start": "tsup --watch",
+    "build": "tsdown",
+    "start": "tsdown --watch",
     "tsc": "tsc --pretty --noEmit",
     "lint": "eslint --cache --max-warnings=0",
     "format": "eslint --fix --cache --max-warnings=0",
@@ -54,7 +52,7 @@
     "@squonk/eslint-config": "2.0.0",
     "@types/node": "22.9.0",
     "eslint": "8.57.0",
-    "tsup": "8.0.2",
+    "tsdown": "0.18.3",
     "typescript": "5.4.5",
     "vitest": "1.5.0",
     "node-fetch": "3.3.2"

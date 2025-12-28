@@ -16,7 +16,7 @@
     // "moduleResolution": "NodeNext",
     // "module": "NodeNext",
     // If NOT transpiling with TS
-    "moduleResolution": "Bundler",
+    "moduleResolution": "bundler",
     "module": "ESNext",
     "noEmit": true,
     // If code runs in the DOM
