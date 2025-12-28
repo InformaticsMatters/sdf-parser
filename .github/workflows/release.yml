@@ -1,0 +1,53 @@
+name: release
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment: semantic-release
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.24.0
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.21.1
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Semantic Release
+        uses: cycjimmy/semantic-release-action@v4
+        id: semantic
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          SEMANTIC_RELEASE_DEBUG: true
