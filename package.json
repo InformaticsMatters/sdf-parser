@@ -49,17 +49,18 @@
     "test": "vitest"
   },
   "devDependencies": {
-    "@squonk/eslint-config": "3.0.0",
-    "@types/node": "22.9.0",
-    "eslint": "9.25.1",
-    "tsdown": "0.18.3",
-    "typescript": "5.4.5",
-    "vitest": "1.5.0",
-    "node-fetch": "3.3.2",
     "@semantic-release/changelog": "6.0.3",
+    "@semantic-release/exec": "7.1.0",
     "@semantic-release/git": "10.0.1",
     "@semantic-release/github": "11.0.1",
     "@semantic-release/npm": "12.0.1",
-    "semantic-release": "24.2.3"
+    "@squonk/eslint-config": "3.0.0",
+    "@types/node": "22.9.0",
+    "eslint": "9.25.1",
+    "node-fetch": "3.3.2",
+    "semantic-release": "24.2.3",
+    "tsdown": "0.18.3",
+    "typescript": "5.4.5",
+    "vitest": "1.5.0"
   }
 }
