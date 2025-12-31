@@ -8,6 +8,13 @@ const config = {
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
     ["@semantic-release/changelog", { changelogFile: "CHANGELOG.md" }],
+    [
+      "@semantic-release/exec",
+      {
+        prepareCmd: "pnpm install --no-frozen-lockfile",
+        publishCmd: "pnpm publish --no-git-checks --tag ${nextRelease.channel || 'latest'}",
+      },
+    ],
     ["@semantic-release/npm", { npmPublish: false }],
     [
       "@semantic-release/git",
